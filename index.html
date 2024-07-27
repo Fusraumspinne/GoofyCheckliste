@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1 class="Titel">
+            Checkliste
+        </h1>
+        
+        <a class="Links" href="">Links</a>
+        <a class="Links" href="https://fusraumspinne.itch.io" target="_blank">Meine Spiele</a>
+    </header>
+
+    <div id="form-container">
+        <div class="form-group">
+            <input class="EingabeText" type="text" id="textfeld1" name="textfeld1" placeholder="Gib hier etwas ein">
+            <input class="EingabeCheck" type="checkbox" id="checkbox1" name="checkbox1">
+            <span class="kreuz" onclick="removeField(1)">✖</span>
+        </div>
+        
+        <div class="Buttons">
+            <button class="Button" onclick="addFields()">Weiteres Feld hinzufügen</button>
+            <button class="Button" onclick="removeFields()">Letztes Feld entfernen</button>
+            <button class="Button" onclick="clearAllFields()">Textfelder leeren</button>
+            <button class="Button" onclick="removeAllFields()">Alle Felder entfernen</button>
+        </div>
+    </div>
+
+    <script>
+    let fieldCounter = 1;
+
+function addFields() {
+    fieldCounter++;
+
+    const formContainer = document.getElementById("form-container");
+
+    const formGroup = document.createElement("div");
+    formGroup.classList.add("form-group");
+
+    const input = document.createElement("input");
+    input.setAttribute("type", "text");
+    input.setAttribute("id", "textfeld" + fieldCounter);
+    input.setAttribute("name", "textfeld" + fieldCounter);
+    input.setAttribute("placeholder", "Gib hier etwas ein");
+    input.classList.add("EingabeText"); // Setze die Klasse für das Textfeld
+
+    const checkbox = document.createElement("input");
+    checkbox.setAttribute("type", "checkbox");
+    checkbox.setAttribute("id", "checkbox" + fieldCounter);
+    checkbox.setAttribute("name", "checkbox" + fieldCounter);
+    checkbox.classList.add("EingabeCheck"); // Setze die Klasse für die Checkbox
+
+    const kreuz = document.createElement("span");
+    kreuz.classList.add("kreuz");
+    kreuz.textContent = "✖";
+    kreuz.onclick = function () {
+        removeField(formGroup);
+    };
+
+    formGroup.appendChild(input);
+    formGroup.appendChild(checkbox);
+    formGroup.appendChild(kreuz);
+
+    formContainer.appendChild(formGroup);
+}
+
+function removeField(fieldGroup) {
+    const formContainer = document.getElementById("form-container");
+    formContainer.removeChild(fieldGroup);
+    fieldCounter--;
+}
+
+function removeFields() {
+    if (fieldCounter > 1) {
+        const formContainer = document.getElementById("form-container");
+        formContainer.removeChild(formContainer.lastElementChild);
+        fieldCounter--;
+    }
+}
+
+function clearAllFields() {
+    const formContainer = document.getElementById("form-container");
+    const formGroups = formContainer.querySelectorAll(".form-group");
+
+    formGroups.forEach((formGroup) => {
+        const input = formGroup.querySelector("input[type='text']");
+        input.value = "";
+
+        const checkbox = formGroup.querySelector("input[type='checkbox']");
+        checkbox.checked = false;
+    });
+}
+
+function removeAllFields() {
+    const formContainer = document.getElementById("form-container");
+    while (formContainer.childElementCount > 2) {
+        formContainer.removeChild(formContainer.lastElementChild);
+    }
+
+    // Setze den Zähler auf 1 zurück und entferne das erste (ursprüngliche) Feld nicht
+    fieldCounter = 1;
+    const input = formContainer.querySelector("input[type='text']");
+    input.value = "";
+
+    const checkbox = formContainer.querySelector("input[type='checkbox']");
+    checkbox.checked = false;
+}
+</script>
+</body>
+</html>
